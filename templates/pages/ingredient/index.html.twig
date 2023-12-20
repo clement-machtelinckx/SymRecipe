@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SymRecip - Mes Ingredient{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mt-4">Mes Ingredient</h1>
+        <small>
+            <div class="count">
+                {{ ingredients.getTotalItemCount }}
+            </div>
+        </small>
+            <table class="table table-hover mt-4">
+                <thead>
+                  <tr>
+                    <th scope="col">Numero</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prix</th>
+                    <th scope="col">Date de création</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for ingredient in ingredients %}
+                  <tr>
+
+                    <td>{{ ingredient.id }}</td>
+                    <td>{{ ingredient.name }}</td>
+                    <td>{{ ingredient.price }}</td>
+                    <td>{{ ingredient.createdAt|date('d/m/y') }}</td>
+
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>   
+              <div class="navigation d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(ingredients) }}
+            </div>
+    </div>
+{% endblock %}
+
+
+
