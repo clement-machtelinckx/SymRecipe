@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SymRecip - Mes Ingredient{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+      {% if not recipes.items is same as ([]) %}
+        <h1 class="mt-4">Mes Recettes</h1>
+
+        <a href="{{ path('recipe.new') }}" class="btn btn-primary">Créer une recette</a>
+
+        <small>
+            <div class="count mt-4">
+                {{ recipes.getTotalItemCount }}
+            </div>
+        </small>
+            <table class="table table-hover mt-4">
+                <thead>
+                  <tr>
+                    <th scope="col">Numero</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prix</th>
+                    <th scope="col">Difficulté</th>
+                    <th scope="col">Date de création</th>
+                    <th scope="col">Edition</th>
+                    <th scope="col">Suppresion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for recipe in recipes %}
+                  <tr>
+
+                    <td>{{ recipe.id }}</td>
+                    <td>{{ recipe.name }}</td>
+                    <td>{{ (recipe.price is same as(null)) ? 'Non renseigneé' : recipe.price }}</td>
+                    <td>{{ (recipe.difficulty is same as(null)) ? 'Non renseigneé' : recipe.difficulty }}</td>
+                    <td>{{ recipe.createdAt|date('d/m/y') }}</td>
+                    <td>todo</td>
+                    <td>todo</td>
+
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>   
+              <div class="navigation d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(recipes) }}
+            </div>
+            {% else %}
+              <h4>il n'y a pas de recette</h4>
+            {% endif %}
+    </div>
+{% endblock %}
+
+
+
