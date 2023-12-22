@@ -7,8 +7,16 @@
       {% if not ingredients.items is same as ([]) %}
         <h1 class="mt-4">Mes Ingredient</h1>
 
+      <a href="{{ path('ingredient.new') }}" class="btn btn-primary">Créer un ingredient</a>
+
+        {% for message in app.flashes('success') %}
+        <div class="alert alert-success mt-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+
         <small>
-            <div class="count">
+            <div class="count mt-4">
                 {{ ingredients.getTotalItemCount }}
             </div>
         </small>
@@ -19,6 +27,8 @@
                     <th scope="col">Nom</th>
                     <th scope="col">Prix</th>
                     <th scope="col">Date de création</th>
+                    <th scope="col">Edition</th>
+                    <th scope="col">Suppresion</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -29,6 +39,8 @@
                     <td>{{ ingredient.name }}</td>
                     <td>{{ ingredient.price }}</td>
                     <td>{{ ingredient.createdAt|date('d/m/y') }}</td>
+                    <td><a href="{{ path('ingredient.edit', { id: ingredient.id }) }}" class="btn btn-info">Edition</a></td>
+                    <td><a href="{{ path('ingredient.delete', { id: ingredient.id }) }}" class="btn btn-warning">Suppresion</a></td>
 
                   </tr>
                   {% endfor %}
