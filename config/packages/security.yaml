@@ -20,7 +20,7 @@ security:
                 login_path: security.login
                 check_path: security.login
             logout:
-                path: secutity.logout
+                path: security.logout
                 target: security.login
 
             # activate different ways to authenticate
