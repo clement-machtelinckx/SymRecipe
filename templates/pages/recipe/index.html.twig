@@ -7,6 +7,12 @@
       {% if not recipes.items is same as ([]) %}
         <h1 class="mt-4">Mes Recettes</h1>
 
+        {% for message in app.flashes('success') %}
+        <div class="alert alert-success mt-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+
         <a href="{{ path('recipe.new') }}" class="btn btn-primary">Créer une recette</a>
 
         <small>
@@ -35,8 +41,8 @@
                     <td>{{ (recipe.price is same as(null)) ? 'Non renseigneé' : recipe.price }}</td>
                     <td>{{ (recipe.difficulty is same as(null)) ? 'Non renseigneé' : recipe.difficulty }}</td>
                     <td>{{ recipe.createdAt|date('d/m/y') }}</td>
-                    <td>todo</td>
-                    <td>todo</td>
+                    <td><a href="{{ path('recipe.edit', { id: recipe.id }) }}" class="btn btn-info">Edition</a></td>
+                    <td><a href="{{ path('recipe.delete', { id: recipe.id }) }}" class="btn btn-warning">Suppresion</a></td>
 
                   </tr>
                   {% endfor %}

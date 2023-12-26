@@ -36,7 +36,13 @@ class RecipeController extends AbstractController
             'recipes' => $recipes,
         ]);
     }
-
+    /**
+     * fonction pour rajouter des recettes dans la bdd
+     *
+     * @param EntityManagerInterface $manager
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/recette/nouveau', name: 'recipe.new', methods: ['GET', 'POST'])]
     public function new(EntityManagerInterface $manager, Request $request): Response
     {
@@ -56,5 +62,47 @@ class RecipeController extends AbstractController
         return $this->render('pages/recipe/new.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+
+    /**
+     * controller pour editer une recette redicrection non foctionnel : /
+     *
+     * @param Recipe $recipe
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    #[Route('/recette/edition/{id}', name: 'recipe.edit', methods: ['GET', 'POST'])]
+    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $manager): Response
+    {
+        
+        $form = $this->createForm(RecipeType::class, $recipe);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $recipe = $form->getData();
+
+            $manager->persist($recipe);
+            $manager->flush();
+            
+            $this->addFlash('success', 'La recette a bien été modifié');
+
+            return $this->redirectToRoute('recipe.index');
+        }
+
+        return $this->render('pages/recipe/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/recette/suppression/{id}', name: 'recipe.delete', methods: ['GET', 'POST'])]
+    public function delete(Recipe $recipe, EntityManagerInterface $manager): Response
+    {
+        $manager->remove($recipe);
+        $manager->flush();
+
+        $this->addFlash('success', 'La recette a bien été supprimé');
+        return $this->redirectToRoute('recipe.index');
     }
 }

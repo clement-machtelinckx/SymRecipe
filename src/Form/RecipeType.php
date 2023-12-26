@@ -45,6 +45,7 @@ class RecipeType extends AbstractType
                     'min' => 1,
                     'max' => 1441,
                 ], 
+                'required' => false,
                 'label' => 'Temps de préparation en minutes',
                 'label_attr' => [
                     'class' => 'form-label mt-4'
@@ -61,6 +62,7 @@ class RecipeType extends AbstractType
                     'min' => 1,
                     'max' => 50,
                 ], 
+                'required' => false,
                 'label' => 'Nombre de personnes',
                 'label_attr' => [
                     'class' => 'form-label mt-4'
@@ -93,6 +95,7 @@ class RecipeType extends AbstractType
                     'minlength' => 2,
                     'maxlength' => 500,
                 ], 
+
                 'label' => 'Description',
                 'label_attr' => [
                     'class' => 'form-label mt-4'
@@ -106,6 +109,7 @@ class RecipeType extends AbstractType
                 'attr' => [
                     'class' => 'form-control'
                 ], 
+                'required' => false,
                 'label' => 'Prix',
                 'label_attr' => [
                     'class' => 'form-label mt-4'
@@ -122,7 +126,7 @@ class RecipeType extends AbstractType
                 ], 
                 'label' => 'Favoris',
                 'label_attr' => [
-                    'class' => 'form-check-label mt-4'
+                    'class' => 'form-check-label'
                 ],
                 'required' => false,
                 'constraints' => [
@@ -148,9 +152,9 @@ class RecipeType extends AbstractType
                 'expanded' => true,
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Créer ma recette',
+                'label' => 'Valider',
                 'attr' => [
-                    'class' => 'btn btn-primary'
+                    'class' => 'btn btn-primary mt-4'
                 ]
             ])
             

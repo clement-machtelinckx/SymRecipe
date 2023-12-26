@@ -59,7 +59,9 @@ class IngredientController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-
+    /**
+     * this controller show a from to edit ingredient in database
+     */
     #[Route('/ingredient/edition/{id}', name: 'ingredient.edit', methods: ['GET', 'POST'])]
     public function edit(Ingredient $ingredient, Request $request, EntityManagerInterface $manager): Response
     {
@@ -82,6 +84,9 @@ class IngredientController extends AbstractController
         ]);
     }
 
+    /**
+     * this controller delete ingredient in database
+     */
     #[Route('/ingredient/suppression/{id}', name: 'ingredient.delete', methods: ['GET', 'POST'])]
     public function delete(Ingredient $ingredient, EntityManagerInterface $manager): Response
     {
