@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}SymRecipe - Inscription{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class='mt-4'>Formulaire d'inscription</h1>
+    
+    {{ form_start(form) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.fullName) }}
+        {{ form_row(form.pseudo) }}
+        {{ form_row(form.plainPassword) }}
+
+    {{ form_end(form) }}
+
+
+</div>
+{% endblock %}
