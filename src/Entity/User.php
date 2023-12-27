@@ -43,6 +43,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?string $plainPassword = null;
 
+    // test de newPassword
+    private ?string $newPassword = null;
+
+
     /**
      * @var string The hashed password
      */
@@ -151,6 +155,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    // test de newPassword
+    public function getNewPassword(): ?string
+    {
+        return $this->newPassword;
+    }
+
+    public function setNewPassword(?string $newPassword): self
+    {
+        $this->newPassword = $newPassword;
 
         return $this;
     }
