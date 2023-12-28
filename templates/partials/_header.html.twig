@@ -1,29 +1,33 @@
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
 
-      <div class="" id="navbarColor01">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link active text-white" href="{{ path('home.index') }}">Accueil</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="{{ path('ingredient.index') }}">ingredient</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="{{ path('recipe.index') }}">Recette</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="#">About</a>
-          </li>
-        </ul>
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item dropdown btn btn-success">
+                 <a class="nav-link dropdown-toggle text-black" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Menu</a>
+                 <div class="dropdown-menu">
+                  <a class="nav-link text-black" href="{{ path('home.index') }}">Accueil</a>
+                  {% if app.user %}
+                  <a class="nav-link text-black" href="{{ path('ingredient.index') }}">Ingredient</a>
+                  <a class="nav-link text-black" href="{{ path('recipe.index') }}">Recette</a>
+                  {% endif %}
+                  <div class="dropdown-divider"></div>
+                  {% if app.user %}
+                  <a class="nav-link text-black" href="{{ path('user.edit', {'id': app.user.id}) }}">Modifier son profil</a>
+                  <a class="nav-link text-black" href="{{ path('user.edit.password', {'id': app.user.id}) }}">Modifier son password</a>
+                  {% endif %}
+                  <div class ="dropdown-divider"></div> 
+                  {% if not app.user %}
+                  <a class="nav-link text-black" href="{{ path('security.registration') }}">Inscription</a>
+                  <a class="nav-link text-black" href="{{ path('security.login') }}">Connexion</a>
+                  {% endif %}
+                  {% if app.user %}
+                  <a class="nav-link text-black" href="{{ path('security.logout') }}">Deconnexion</a>
+                  {% endif %}
+                 </div>
+        </li>
+      </ul>
+    </div>
 
-      </div>
-    </div>
-    <div class="d-flex justify-content-end">
-      <a href="{{ path('security.registration') }}" class="btn btn-success mr-4">Inscription</a>
-      <a href="{{ path('security.login') }}" class="btn btn-success mr-4">Connexion</a>
-      <a href="{{ path('security.logout') }}" class="btn btn-danger">Deconnexion</a>
-    </div>
     
   
   </nav>

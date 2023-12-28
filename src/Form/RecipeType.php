@@ -6,6 +6,7 @@ use App\Entity\Recipe;
 use App\Entity\Ingredient;
 use App\Repository\IngredientRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,12 +18,18 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class RecipeType extends AbstractType
 {
+    private $security;
+    public function __construct(TokenStorageInterface $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
         $builder
         ->add('name', TextType::class, [
             'attr' => [
@@ -141,7 +148,9 @@ class RecipeType extends AbstractType
                 'class' => Ingredient::class,
                 'query_builder' => function (IngredientRepository $repository) {
                     return $repository->createQueryBuilder('i')
-                        ->orderBy('i.name', 'ASC');
+                        ->where('i.user = :user')
+                        ->orderBy('i.name', 'ASC')
+                        ->setParameter('user', $this->tokenStorage->getToken()->getUser());
                 },
                 'label' => 'Les ingrédients',
                 'label_attr' => [
@@ -152,7 +161,7 @@ class RecipeType extends AbstractType
                 'expanded' => true,
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Valider',
+                'label' => 'Créer une recette',
                 'attr' => [
                     'class' => 'btn btn-primary mt-4'
                 ]

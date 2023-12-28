@@ -61,6 +61,15 @@ class UserController extends AbstractController
     }
 
     #[Route('/utilisateur/edition-mot-de-passe/{id}', name: 'user.edit.password', methods: ['GET', 'POST'])]
+    /**
+     * this controller just doesn't fucking work
+     *
+     * @param User $user
+     * @param Request $request
+     * @param UserPasswordHasherInterface $hasher
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     public function editPassword(User $user, Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager) : Response
     {
         $form = $this->createForm(UserPasswordType::class, $user);
@@ -69,7 +78,8 @@ class UserController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             // dd($form->getData());
             if($hasher->isPasswordValid($user, $form->getData()['plainPassword'])){
-                $user->setPassword($hasher->hashPassword($user, $form->getData()['newPassword']));
+                // $user->setCreatedAt(new \DateTimeImmutable());
+                $user->setPlainPassword($form->getData()['newPassword']);
 
                 
                 $manager->persist($user);
