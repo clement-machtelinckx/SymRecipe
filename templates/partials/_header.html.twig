@@ -20,7 +20,10 @@
       </div>
     </div>
     <div class="d-flex justify-content-end">
-      <a class='btn btn-danger' href='{{ path('security.logout') }}'>Deconnexion</a>
-  </div>
+      <a href="{{ path('security.registration') }}" class="btn btn-success mr-4">Inscription</a>
+      <a href="{{ path('security.login') }}" class="btn btn-success mr-4">Connexion</a>
+      <a href="{{ path('security.logout') }}" class="btn btn-danger">Deconnexion</a>
+    </div>
+    
   
   </nav>
