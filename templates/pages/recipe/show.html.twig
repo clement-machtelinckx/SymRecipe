@@ -1,0 +1,50 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Symrecipe - {{ recipe.name }} {% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="mt-4">{{ recipe.name }}</h1>
+
+    <span class="badge bg-primary">Créée le {{ recipe.createdAt|date("d/m/y") }}</span>
+
+    <div class="mt-4">
+    {% if recipe.time %}
+    <p class="mt-4">Temps (en minutes) : {{ recipe.time }}</p>
+    {% else %}
+    <p class="mt-4">Temps : Non renseigné</p>
+    {% endif %}
+    </div>
+
+    <div class="mt-4">
+    {% if recipe.nbPeople %}
+    <p class="mt-4">Pour {{ recipe.nbPeople }} personnes</p>
+    {% else %}
+    <p class="mt-4">Pour : Non renseigné</p>
+    {% endif %}
+    </div>
+
+    <div class="mt-4">
+    {% if recipe.difficulty %}
+    <p class="mt-4">Difficulté {{ recipe.difficulty }}/5</p>
+    {% else %}
+    <p class="mt-4">Difficulté : Non renseigné</p>
+    {% endif %}
+    </div>
+
+    <div class="mt-4">
+    {% if recipe.price %}
+    <p class="mt-4">Prix : {{ recipe.price }} €</p>
+    {% else %}
+    <p class="mt-4">Prix : Non renseigné</p>
+    {% endif %}
+    </div>
+
+    <div class="mt-4">{{ recipe.description|raw }}</div>
+
+    <h4 class="mt-4">Ingredients</h4>
+    {% for ingredient in recipe.ingredients %}
+    <span class="badge bg-primary " >{{ ingredient.name }}</span>
+    {% endfor %}
+</div>
+{% endblock %}

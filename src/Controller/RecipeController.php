@@ -41,6 +41,38 @@ class RecipeController extends AbstractController
             'recipes' => $recipes,
         ]);
     }
+
+
+    #[Route('/recette/publique', name: 'recipe.index.public', methods: ['GET'])]
+    public function indexPublic(PaginatorInterface $paginator, RecipeRepository $repository, Request $request) : Response
+    {
+        $recipes = $paginator->paginate(
+            $repository->findPublicRecipe(100),
+            $request->query->getInt('page', 1),
+            10
+
+            );
+        return $this->render('pages/recipe/index_public.html.twig',
+        [
+            'recipes' => $recipes,
+        ]);
+    }
+
+
+
+    #[Route('/recette/{id}', name: 'recipe.show', methods: ['GET'])]
+    public function show(Recipe $recipe): Response
+    {
+
+        if (!($this->isGranted('ROLE_USER') && ($this->getUser()->getId() == $recipe->getUser()->getId()) || $recipe->isIsPublic())) {
+            throw new AccessDeniedException('Vous n\'avez pas le droit d\'accéder à cette ressource.');
+        }
+        
+
+        return $this->render('pages/recipe/show.html.twig', [
+            'recipe' => $recipe,
+        ]);
+    }
     /**
      * fonction pour rajouter des recettes dans la bdd
      *
