@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 
 
 
@@ -25,6 +27,7 @@ class RecipeController extends AbstractController
      * @return Response
      */
     #[Route('/recette', name: 'recipe.index', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function index(RecipeRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
 
@@ -46,6 +49,7 @@ class RecipeController extends AbstractController
      * @return Response
      */
     #[Route('/recette/nouveau', name: 'recipe.new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function new(EntityManagerInterface $manager, Request $request): Response
     {
         $recipe = new Recipe();
@@ -80,6 +84,9 @@ class RecipeController extends AbstractController
     #[Route('/recette/edition/{id}', name: 'recipe.edit', methods: ['GET', 'POST'])]
     public function edit(Recipe $recipe, Request $request, EntityManagerInterface $manager): Response
     {
+        if (!$this->isGranted('ROLE_USER') && ($this->getUser()->getId() != $recipe->getUser()->getId())) {
+            throw new AccessDeniedException('Vous n\'avez pas le droit d\'accéder à cette ressource.');
+        }
         
         $form = $this->createForm(RecipeType::class, $recipe);
 
@@ -103,6 +110,9 @@ class RecipeController extends AbstractController
     #[Route('/recette/suppression/{id}', name: 'recipe.delete', methods: ['GET', 'POST'])]
     public function delete(Recipe $recipe, EntityManagerInterface $manager): Response
     {
+        if (!$this->isGranted('ROLE_USER') && ($this->getUser()->getId() != $recipe->getUser()->getId())) {
+            throw new AccessDeniedException('Vous n\'avez pas le droit d\'accéder à cette ressource.');
+        }
         $manager->remove($recipe);
         $manager->flush();
 

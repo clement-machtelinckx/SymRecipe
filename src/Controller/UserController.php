@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 
 class UserController extends AbstractController
 {
@@ -27,7 +29,10 @@ class UserController extends AbstractController
     public function edit(User $user, Request $request, EntityManagerInterface $manager,
     UserPasswordHasherInterface $hasher): Response
     {
-    
+        if (!$this->isGranted('ROLE_USER') && ($this->getUser()->getId() != $user->getUser()->getId())) {
+            throw new AccessDeniedException('Vous n\'avez pas le droit d\'accéder à cette ressource.');
+        }
+        
         if (!$this->getUser()) {
             // Si personne n'est connecté, rediriger vers la page de connexion
             return $this->redirectToRoute('security.login');
@@ -72,6 +77,10 @@ class UserController extends AbstractController
      */
     public function editPassword(User $user, Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $manager) : Response
     {
+        if (!$this->isGranted('ROLE_USER') && ($this->getUser()->getId() != $user->getUser()->getId())) {
+            throw new AccessDeniedException('Vous n\'avez pas le droit d\'accéder à cette ressource.');
+        }
+    
         $form = $this->createForm(UserPasswordType::class, $user);
         $form->handleRequest($request);
 

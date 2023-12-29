@@ -10,9 +10,9 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 
 
 
@@ -72,9 +72,11 @@ class IngredientController extends AbstractController
      * this controller show a from to edit ingredient in database
      */
     #[Route('/ingredient/edition/{id}', name: 'ingredient.edit', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER and user.getId() == ingredient.getUser().getId()')]
     public function edit(Ingredient $ingredient, Request $request, EntityManagerInterface $manager): Response
     {
+        if (!$this->isGranted('ROLE_USER') && ($this->getUser()->getId() != $ingredient->getUser()->getId())) {
+            throw new AccessDeniedException('Vous n\'avez pas le droit d\'accéder à cette ressource.');
+        }
         // dd($this->getUser()->getId());
         // dd($ingredient->getUser()->getId());
         $form = $this->createForm(IngredientType::class, $ingredient);
@@ -101,6 +103,9 @@ class IngredientController extends AbstractController
     #[Route('/ingredient/suppression/{id}', name: 'ingredient.delete', methods: ['GET', 'POST'])]
     public function delete(Ingredient $ingredient, EntityManagerInterface $manager): Response
     {
+        if (!$this->isGranted('ROLE_USER') && ($this->getUser()->getId() != $ingredient->getUser()->getId())) {
+            throw new AccessDeniedException('Vous n\'avez pas le droit d\'accéder à cette ressource.');
+        }
         $manager->remove($ingredient);
         $manager->flush();
 
