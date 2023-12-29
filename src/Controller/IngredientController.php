@@ -10,7 +10,11 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+
 
 class IngredientController extends AbstractController
 {
@@ -22,8 +26,10 @@ class IngredientController extends AbstractController
      * @return Response
      */
     #[Route('/ingredient', name: 'ingredient.index', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function index(IngredientRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
+        // $this->denyAccessUnlessGranted('ROLE_USER');
         $ingredients = $paginator->paginate(
             $repository->findBy(['user' => $this->getUser()]),
             $request->query->getInt('page', 1),
@@ -39,8 +45,10 @@ class IngredientController extends AbstractController
      */
 
     #[Route('/ingredient/nouveau', name: 'ingredient.new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function new(Request $request, EntityManagerInterface $manager) : Response
     {
+        // $this->denyAccessUnlessGranted('ROLE_USER');
         $ingredient = new Ingredient();
         $form = $this->createForm(IngredientType::class, $ingredient);
 
@@ -64,9 +72,11 @@ class IngredientController extends AbstractController
      * this controller show a from to edit ingredient in database
      */
     #[Route('/ingredient/edition/{id}', name: 'ingredient.edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER and user.getId() == ingredient.getUser().getId()')]
     public function edit(Ingredient $ingredient, Request $request, EntityManagerInterface $manager): Response
     {
-        
+        // dd($this->getUser()->getId());
+        // dd($ingredient->getUser()->getId());
         $form = $this->createForm(IngredientType::class, $ingredient);
 
         $form->handleRequest($request);
