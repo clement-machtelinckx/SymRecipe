@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Mark;
 use App\Entity\Recipe;
 use App\Form\MarkType;
 use App\Form\RecipeType;
@@ -68,8 +69,39 @@ class RecipeController extends AbstractController
         ]);
     }
 
-
-
+    /**
+     * fonction pour rajouter des recettes dans la bdd
+     *
+     * @param EntityManagerInterface $manager
+     * @param Request $request
+     * @return Response
+     */
+    #[Route('/recette/nouveau', name: 'recipe.new', methods: ['GET', 'POST'])]
+    // #[IsGranted('ROLE_USER')]
+    public function new(EntityManagerInterface $manager, Request $request): Response
+    {
+        
+        $recipe = new Recipe();
+        $form = $this->createForm(RecipeType::class, $recipe);
+        
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $recipe = $form->getData();
+            $recipe->setUser($this->getUser());
+            $manager->persist($recipe);
+            $manager->flush();
+    
+            $this->addFlash('success', 'La recette a bien été ajoutée');
+    
+            return $this->redirectToRoute('recipe.index');
+        }
+    
+        return $this->render('pages/recipe/new.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+    
 /**
  * This controller allows us to show a recipe.
  *
@@ -129,41 +161,6 @@ public function show(Recipe $recipe, Request $request, EntityManagerInterface $m
         'markForm' => $markForm->createView(),
     ]);
 }
-
-
-    /**
-     * fonction pour rajouter des recettes dans la bdd
-     *
-     * @param EntityManagerInterface $manager
-     * @param Request $request
-     * @return Response
-     */
-    #[Route('/recette/nouveau', name: 'recipe.new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function new(EntityManagerInterface $manager, Request $request): Response
-    {
-        
-        $recipe = new Recipe();
-        $form = $this->createForm(RecipeType::class, $recipe);
-        
-        $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-            $recipe->setUser($this->getUser());
-            $manager->persist($recipe);
-            $manager->flush();
-    
-            $this->addFlash('success', 'La recette a bien été ajoutée');
-    
-            return $this->redirectToRoute('recipe.index');
-        }
-    
-        return $this->render('pages/recipe/new.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
-    
-
 
     /**
      * controller pour editer une recette redicrection non foctionnel : /
