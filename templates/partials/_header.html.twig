@@ -6,6 +6,7 @@
                  <a class="nav-link dropdown-toggle text-black" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Menu</a>
                  <div class="dropdown-menu">
                   <a class="nav-link text-black" href="{{ path('home.index') }}">Accueil</a>
+                  <a class="nav-link text-black" href="{{ path('recipe.index.public') }}">Recette publique</a>
                   {% if app.user %}
                   <a class="nav-link text-black" href="{{ path('ingredient.index') }}">Ingredient</a>
                   <a class="nav-link text-black" href="{{ path('recipe.index') }}">Recette</a>

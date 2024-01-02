@@ -5,7 +5,7 @@
 {% block body %}
     <div class="container mt-4">
       {% if not recipes.items is same as ([]) %}
-        <h1 class="mt-4">Mes Recettes</h1>
+        <h1 class="mt-4">Recettes publique</h1>
 
         {% for message in app.flashes('success') %}
         <div class="alert alert-success mt-4">
@@ -17,46 +17,24 @@
         {{ message }}
     </div>
     {% endfor %}
-
-
-
         <small>
             <div class="count mt-4">
                 {{ recipes.getTotalItemCount }}
             </div>
         </small>
-            <table class="table table-hover mt-4">
-                <thead>
-                  <tr>
-                    <th scope="col">Numero</th>
-                    <th scope="col">Nom</th>
-                    <th scope="col">Prix</th>
-                    <th scope="col">Difficulté</th>
-                    <th scope="col">Nom du createur</th>
-                    <th scope="col">Date de création</th>
-                    <th scope="col">Vue</th>
-
-
-                  </tr>
-                </thead>
-                <tbody>
+        <div class="d-flex justify-content-center flex-wrap">
                     {% for recipe in recipes %}
-                  <tr>
-
-                    <td>{{ recipe.id }}</td>
-                    <td>{{ recipe.name }}</td>
-                    <td>{{ (recipe.price is same as(null)) ? 'Non renseigneé' : recipe.price }}</td>
-                    <td>{{ (recipe.difficulty is same as(null)) ? 'Non renseigneé' : recipe.difficulty }}</td>
-                    <td>{{ recipe.user.fullName }}</td>
-                    <td>{{ recipe.createdAt|date('d/m/y') }}</td>
-                    <td><a href="{{ path('recipe.show', { id: recipe.id }) }}" class="btn btn-success">Vue</a></td>
-
-
-                  </tr>
+                    <div class="card border-info m-2" style="max-width: 20rem;">
+                      <div class="card-header">Recette n: {{ recipe.id }}</div>
+                      <div class="card-body">
+                        <h4 class="card-title">{{ recipe.name }}</h4>
+                        <p class="card-text">{{ recipe.description|slice(0, 100)~ '...' }}</p>
+                        <a href="{{ path('recipe.show', { id: recipe.id }) }}" class="btn btn-success">Vue</a>
+                      </div>
+                    </div>
                   {% endfor %}
-                </tbody>
-              </table>   
-              <div class="navigation d-flex justify-content-center mt-4">
+        </div>
+         <div class="navigation d-flex justify-content-center mt-4">
                 {{ knp_pagination_render(recipes) }}
             </div>
             {% else %}
