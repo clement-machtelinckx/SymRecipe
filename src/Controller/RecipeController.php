@@ -43,6 +43,14 @@ class RecipeController extends AbstractController
     }
 
 
+    /**
+     * this controller allow us to show all public recipe
+     *
+     * @param PaginatorInterface $paginator
+     * @param RecipeRepository $repository
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/recette/publique', name: 'recipe.index.public', methods: ['GET'])]
     public function indexPublic(PaginatorInterface $paginator, RecipeRepository $repository, Request $request) : Response
     {
@@ -60,6 +68,12 @@ class RecipeController extends AbstractController
 
 
 
+    /**
+     * this controller allow us to show a recipe
+     *
+     * @param Recipe $recipe
+     * @return Response
+     */
     #[Route('/recette/{id}', name: 'recipe.show', methods: ['GET'])]
     public function show(Recipe $recipe): Response
     {
@@ -82,13 +96,16 @@ class RecipeController extends AbstractController
      */
     #[Route('/recette/nouveau', name: 'recipe.new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function new(EntityManagerInterface $manager, Request $request): Response
+    public function new(EntityManagerInterface $manager, Request $request, Recipe $recipe): Response
     {
+
         $recipe = new Recipe();
         $form = $this->createForm(RecipeType::class, $recipe);
         
         $form->handleRequest($request);
+        
         if ($form->isSubmitted() && $form->isValid()) {
+
             $recipe = $form->getData();
             $recipe->setUser($this->getUser());
             $manager->persist($recipe);
@@ -119,7 +136,7 @@ class RecipeController extends AbstractController
         if (!$this->isGranted('ROLE_USER') && ($this->getUser()->getId() != $recipe->getUser()->getId())) {
             throw new AccessDeniedException('Vous n\'avez pas le droit d\'accéder à cette ressource.');
         }
-        
+
         $form = $this->createForm(RecipeType::class, $recipe);
 
         $form->handleRequest($request);
@@ -139,6 +156,13 @@ class RecipeController extends AbstractController
         ]);
     }
 
+    /**
+     * this controller allow us to delete a recipe
+     *
+     * @param Recipe $recipe
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/recette/suppression/{id}', name: 'recipe.delete', methods: ['GET', 'POST'])]
     public function delete(Recipe $recipe, EntityManagerInterface $manager): Response
     {

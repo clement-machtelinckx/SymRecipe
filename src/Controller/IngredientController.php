@@ -40,10 +40,14 @@ class IngredientController extends AbstractController
         ]);
     }
 
-    /**
-     * this controller show a from to add new ingredient in database
-     */
 
+    /**
+     * this controller allow us to add ingredient in database
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/ingredient/nouveau', name: 'ingredient.new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function new(Request $request, EntityManagerInterface $manager) : Response
@@ -53,6 +57,7 @@ class IngredientController extends AbstractController
         $form = $this->createForm(IngredientType::class, $ingredient);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $ingredient = $form->getData();
             $ingredient->setUser($this->getUser());
@@ -68,11 +73,17 @@ class IngredientController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
     /**
-     * this controller show a from to edit ingredient in database
+     * this controller allow us to edit ingredient in database
+     *
+     * @param Ingredient $ingredient
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
      */
     #[Route('/ingredient/edition/{id}', name: 'ingredient.edit', methods: ['GET', 'POST'])]
-    public function edit(Ingredient $ingredient, Request $request, EntityManagerInterface $manager): Response
+     public function edit(Ingredient $ingredient, Request $request, EntityManagerInterface $manager): Response
     {
         if (!$this->isGranted('ROLE_USER') && ($this->getUser()->getId() != $ingredient->getUser()->getId())) {
             throw new AccessDeniedException('Vous n\'avez pas le droit d\'accéder à cette ressource.');
@@ -97,10 +108,17 @@ class IngredientController extends AbstractController
         ]);
     }
 
+
+
     /**
-     * this controller delete ingredient in database
+     * this controller allow us to delete ingredient in database
+     *
+     * @param Ingredient $ingredient
+     * @param EntityManagerInterface $manager
+     * @return Response
      */
     #[Route('/ingredient/suppression/{id}', name: 'ingredient.delete', methods: ['GET', 'POST'])]
+
     public function delete(Ingredient $ingredient, EntityManagerInterface $manager): Response
     {
         if (!$this->isGranted('ROLE_USER') && ($this->getUser()->getId() != $ingredient->getUser()->getId())) {

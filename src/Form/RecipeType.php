@@ -141,6 +141,20 @@ class RecipeType extends AbstractType
                     new Assert\NotNull()
                 ]
             ])
+            ->add('isPublic', CheckboxType::class, [
+                'attr' => [
+                    'class' => 'form-check-input'
+                ], 
+                'label' => 'Public',
+                'label_attr' => [
+                    'class' => 'form-check-label'
+                ],
+                'required' => false,
+                'constraints' => [
+                    new Assert\Type('bool'),
+                    new Assert\NotNull()
+                ]
+            ])
             ->add('ingredients', EntityType::class, [
                 'attr' => [
                     'class' => 'form-select'

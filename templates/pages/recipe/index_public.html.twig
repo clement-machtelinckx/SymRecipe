@@ -18,7 +18,7 @@
     </div>
     {% endfor %}
 
-        <a href="{{ path('recipe.new') }}" class="btn btn-primary">Créer une recette</a>
+
 
         <small>
             <div class="count mt-4">
@@ -32,10 +32,11 @@
                     <th scope="col">Nom</th>
                     <th scope="col">Prix</th>
                     <th scope="col">Difficulté</th>
+                    <th scope="col">Nom du createur</th>
                     <th scope="col">Date de création</th>
                     <th scope="col">Vue</th>
-                    <th scope="col">Edition</th>
-                    <th scope="col">Suppresion</th>
+
+
                   </tr>
                 </thead>
                 <tbody>
@@ -46,10 +47,10 @@
                     <td>{{ recipe.name }}</td>
                     <td>{{ (recipe.price is same as(null)) ? 'Non renseigneé' : recipe.price }}</td>
                     <td>{{ (recipe.difficulty is same as(null)) ? 'Non renseigneé' : recipe.difficulty }}</td>
+                    <td>{{ recipe.user.fullName }}</td>
                     <td>{{ recipe.createdAt|date('d/m/y') }}</td>
                     <td><a href="{{ path('recipe.show', { id: recipe.id }) }}" class="btn btn-success">Vue</a></td>
-                    <td><a href="{{ path('recipe.edit', { id: recipe.id }) }}" class="btn btn-info">Edition</a></td>
-                    <td><a href="{{ path('recipe.delete', { id: recipe.id }) }}" class="btn btn-warning">Suppresion</a></td>
+
 
                   </tr>
                   {% endfor %}
